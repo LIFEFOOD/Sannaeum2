@@ -53,17 +53,54 @@ jobs:
         echo "$KEYSTORE_BASE64" | base64 --decode > sannaeeum.keystore
         chmod 600 sannaeeum.keystore
 
-    - name: Build with buildozer (release)
+    - name: Create buildozer.spec backup
+      run: |
+        # buildozer.spec 백업 (변경 방지)
+        cp buildozer.spec buildozer.spec.original
+        echo "✅ Original buildozer.spec backed up"
+
+    - name: Verify buildozer.spec is unchanged
+      run: |
+        echo "🔍 Checking if buildozer.spec contains environment variables..."
+        if grep -q "\${KEYSTORE_PASSWORD}" buildozer.spec; then
+          echo "✅ buildozer.spec uses \${KEYSTORE_PASSWORD} correctly"
+        else
+          echo "⚠️ buildozer.spec may have been modified"
+        fi
+        
+        if grep -q "\${KEY_PASSWORD}" buildozer.spec; then
+          echo "✅ buildozer.spec uses \${KEY_PASSWORD} correctly"
+        else
+          echo "⚠️ buildozer.spec may have been modified"
+        fi
+
+    - name: Build with buildozer (release) - NO ENV SUBSTITUTION
       env:
+        # 환경변수는 설정하지만 buildozer.spec은 변경하지 않음
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
       run: |
-        buildozer android release
+        # 중요: buildozer.spec을 수정하지 않고 환경변수로만 전달
+        echo "🔑 Using keystore with alias from buildozer.spec"
+        echo "📝 buildozer.spec content (password lines hidden):"
+        grep -v "password\|PASSWORD" buildozer.spec | head -20
+        
+        # buildozer 실행 - 환경변수는 자동으로 치환됨
+        buildozer -v android release
+        
+        # 빌드 후 buildozer.spec이 변경되었는지 확인
+        echo "🔍 Checking if buildozer.spec was modified..."
+        if diff -q buildozer.spec buildozer.spec.original > /dev/null; then
+          echo "✅ buildozer.spec was NOT modified!"
+        else
+          echo "⚠️ WARNING: buildozer.spec was modified!"
+          diff buildozer.spec buildozer.spec.original || true
+        fi
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
-        name: sannaeeum-link-apk
+        name: sannaeeum-link-release
         path: |
           **/*.apk
           **/*.aab
