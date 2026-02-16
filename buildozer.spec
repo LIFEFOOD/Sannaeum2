@@ -73,12 +73,15 @@ android.package_format = aab
 android.keystore = %(source.dir)s/sannaeeum.keystore
 
 # (str) Keystore password - GitHub Secrets에서 전달
+# 실제 비밀번호: sskk052301**01 (KEYSTORE_PASSWORD에 등록됨)
 android.keystore_password = ${KEYSTORE_PASSWORD}
 
 # (str) Keystore alias - 직접 입력 (고정)
 android.keyalias = sannaeeum
 
 # (str) Key password - GitHub Secrets에서 전달
+# 실제 비밀번호: sskk052301**01 (KEY_PASSWORD에 등록됨)
+# ※ 키스토어 비밀번호와 동일한 값 사용
 android.keyalias_password = ${KEY_PASSWORD}
 
 # (bool) Release build
@@ -117,6 +120,36 @@ android.add_src =
 # (list) Extra libraries to include
 android.add_libs =
 
+# (list) Extra Android manifest options
+android.extra_manifest_xml =
+
+# (bool) Use the new toolchain
+android.new_toolchain = True
+
+# (str) Ant path (if needed)
+# android.ant_path =
+
+# (str) SDK path (if needed)
+# android.sdk_path =
+
+# (str) NDK path (already set above)
+# android.ndk_path = /home/runner/.buildozer/android/platform/android-ndk-r25b
+
+# (bool) Use the older toolchain
+# android.old_toolchain = False
+
+# (bool) Enable logging of the android打包信息
+android.log_打包信息 = True
+
+#
+# iOS specific (필요 없으면 무시)
+#
+ios.kivy_ios_url = https://github.com/kivy/kivy-ios
+ios.kivy_ios_branch = master
+ios.ios_deploy_url = https://github.com/phonegap/ios-deploy
+ios.ios_deploy_branch = 1.10.0
+ios.codesign.allowed = false
+
 #
 # Logging
 #
@@ -136,6 +169,9 @@ log_to_file = True
 # (str) Log file name
 log_filename = buildozer.log
 
+# (bool) Log the host information
+log_host = True
+
 [buildozer]
 
 # (int) Log level
@@ -152,3 +188,21 @@ bin_dir = ./bin
 
 # (int) Maximum number of concurrent threads for build
 jobs = 4
+
+# (str) The directory to look for the Android SDK
+# android.sdk_path =
+
+# (str) The directory to look for the Android NDK
+# android.ndk_path = /home/runner/.buildozer/android/platform/android-ndk-r25b
+
+# (str) The directory to look for the Android ANT
+# android.ant_path =
+
+# (str) The directory to look for the Android SDK Tools
+# android.sdk_tools_path =
+
+# (str) The directory to look for the Android NDK standalone toolchain
+# android.ndk_toolchain_path =
+
+# (str) The directory to look for the Android NDK toolchain
+# android.toolchain_path =
