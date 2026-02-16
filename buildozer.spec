@@ -15,11 +15,14 @@ source.dir = .
 # (list) Source files to include
 source.include_exts = py,png,jpg,kv,ttf,txt,json
 
+# (list) Source files to exclude
+source.exclude_exts = spec
+
 # (str) Application versioning
 version = 1.0.0
 version.code = 1
 
-# (list) Application requirements - 중요! android 추가
+# (list) Application requirements
 requirements = python3,kivy==2.1.0,pyjnius,android
 
 # (str) Icon of the application
@@ -60,7 +63,7 @@ android.use_androidx = True
 android.gradle_dependencies = 'androidx.core:core:1.9.0'
 
 # Gradle 데몬 메모리 설정
-android.gradle_options = -Xmx2048M
+android.gradle_options = -Xmx2048M --stacktrace --info
 
 # (str) Package format (apk or aab)
 android.package_format = aab
@@ -87,11 +90,32 @@ android.build_tools = 33.0.2
 # (str) The version of the NDK to use
 android.ndk_version = 25.2.9519653
 
+# (str) NDK path - 명시적 지정 (충돌 방지)
+android.ndk_path = /home/runner/.buildozer/android/platform/android-ndk-r25b
+
+# (bool) Ignore environment NDK variables
+android.ignore_environment_ndk = True
+
+# (str) Java version
+android.java_version = 11
+
 # (str) The p4a bootstrap to use
 android.bootstrap = sdl2
 
 # (bool) Compile the python in the pyc format
 android.pyc = True
+
+# (bool) Copy the packaged asset by
+android.copy_libs = True
+
+# (bool) Clean build
+android.clean_on_restart = False
+
+# (list) Extra Java source files
+android.add_src =
+
+# (list) Extra libraries to include
+android.add_libs =
 
 #
 # Logging
@@ -106,6 +130,12 @@ debug_commands = True
 # (bool) Show the debug output of the build
 debug_build = True
 
+# (bool) Log to file
+log_to_file = True
+
+# (str) Log file name
+log_filename = buildozer.log
+
 [buildozer]
 
 # (int) Log level
@@ -113,3 +143,12 @@ log_level = 2
 
 # (bool) Warn if the application is built as root
 warn_on_root = 1
+
+# (str) Path to the build directory
+build_dir = ./.buildozer
+
+# (str) Path to the bin directory
+bin_dir = ./bin
+
+# (int) Maximum number of concurrent threads for build
+jobs = 4
